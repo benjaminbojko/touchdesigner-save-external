@@ -316,8 +316,7 @@ this TOX does not already exist.
 				pass
 			
 			else:
-				# changed to check if parameter 'file' exists as well
-				if (eachOp.par['file'] != '') and (eachOp.par['file']):
+				if eachOp.par['file'] != '':
 					external_dats.append(eachOp)
 				else:
 					pass
@@ -376,14 +375,26 @@ this TOX does not already exist.
 		ui.panes.current.home()
 		print(type(ui.panes.current))
 
-	def Keyboard_input(self, shortcut):
-		'''Keyboard input handler
+	def Save_dirty_tox(self):
+		'''Save all dirty comps without prompt
 		'''
+		children = self.Update_dirty_table()
+		for each in children:
+			if each.dirty:
+				print('Saving tox: ', each.path)
+				self.Save_over_tox(each)
+
+		else:
+			return None
+
+	def Keyboard_input(self, shortcut):
+		# '''Keyboard input handler
+		# '''
 		shortcut_lookup = {
+			'ctrl.s' : self.Save_dirty_tox,
 			'ctrl.w' : self.Prompt_to_save,
 			'ctrl.shift.w' : self.Find_dirty_tox
 		}
-
 		func = shortcut_lookup.get(shortcut)
 
 		try:
